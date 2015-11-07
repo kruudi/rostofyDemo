@@ -25,9 +25,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,8 +38,13 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ViewFlipper viewFlipper;
     private float lastX;
+
+    private ArrayList<Restaurant> restoList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        restoList.add(new Restaurant("Demo1", 59.439372, 24.742506));
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
@@ -101,7 +108,13 @@ public class Main extends FragmentActivity implements OnMapReadyCallback {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
             // Zoom in the Google Map
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+
+            for (int i = restoList.size(); i >= 1; i--) {
+                Restaurant current = restoList.get(i-1);
+                LatLng curPos = new LatLng(current.getLatitude(),current.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(curPos).title(current.getName()));
+            }
 
         } else {
             //TODO this stuff here
